@@ -1,14 +1,16 @@
-<!DOCTYPE html>
-<head>
-    <!-- Bootstrap stylesheet-->
-    <link rel="stylesheet" 
-        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" 
-        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" 
-        crossorigin="anonymous"
-    >
-</head>
-<body>
-    <div class="container">
-        Hello World
-    </div>
-</body>
+{% extends 'base.html' %}
+{% block title %} Welcome to TTT! {% endblock %}
+
+{% block content %} 
+    <center> 
+        <div class='container' style="width: 800px">
+            <div class = mt-4>
+                <img src= {{ url_for('static', filename='ttt.png') }} class="img-thumbnail" alt="" width="150" height="150"> 
+                <h1> Welcome to 3D Tick Tack Toe! </h1>
+                
+                To begin, either <a href="#">create</a> a new multiplayer game, <a href="#">play</a> vs AI 
+                or <a href="#">join</a> an existing game
+            </div>
+        </div>
+    </center>
+{% endblock %}
