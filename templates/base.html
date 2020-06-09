@@ -1,4 +1,4 @@
-<!-- Default bootrap-flask base template -->
+<!-- Default bootrap-flask base template with background colour + title block added -->
 <!doctype html>
 <html lang="en">
     <head>
@@ -15,7 +15,7 @@
         <title>{% block title %}{% endblock %}</title>
         {% endblock %}
     </head>
-    <body>
+    <body style="background-color:#f2f2f2">
         <!-- Your page content -->
         {% block content %}{% endblock %}
 
@@ -25,3 +25,4 @@
         {% endblock %}
     </body>
 </html>
+

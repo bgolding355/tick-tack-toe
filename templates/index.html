@@ -3,14 +3,41 @@
 
 {% block content %} 
     <center> 
-        <div class='container' style="width: 800px">
+        <div class='container' style="width: 650px">
             <div class = mt-4>
-                <img src= {{ url_for('static', filename='ttt.png') }} class="img-thumbnail" alt="" width="150" height="150"> 
+                <img src= {{ url_for('static', filename='images/ttt.png') }} class="img-thumbnail" alt="" width="150" height="150"> 
                 <h1> Welcome to 3D Tick Tack Toe! </h1>
                 
-                To begin, either <a href="#">create</a> a new multiplayer game, <a href="#">play</a> vs AI 
-                or <a href="#">join</a> an existing game
+                To begin, either <a href="#" id='create_multiplayer'>create</a> a new multiplayer game, 
+                <a href={{url_for('singleplayer')}} id='create_single'>play</a> vs AI 
+                or <a href="#" id='join'>join</a> an existing game
             </div>
         </div>
+
+        <div class='container' id='multiplayer_popup' style="width: 650px" hidden=true>
+            <div class = 'mt-4 px-1 '>
+                <form>
+                        <label for="exampleInputEmail1">To join a multiplayer game </label>
+                        <input type="text" id="game_id" name="name_id" placeholder="enter your game ID">
+                </form>
+            </div>
+        </div>
+
+        <div class='container' style="width: 650px">
+            <div class = 'mt-4 px-1'>
+                <h1> How to Play</h1>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                Velit egestas dui id ornare. Amet est placerat in egestas erat imperdiet 
+                sed euismod nisi. Semper eget duis at tellus at. A arcu cursus vitae congue 
+                mauris rhoncus aenean vel. Pulvinar mattis nunc sed blandit libero volutpat sed 
+                cras. Etiam dignissim diam quis enim lobortis scelerisque fermentum. In hac habitasse 
+                platea dictumst quisque sagittis purus. Pulvinar sapien et ligula ullamcorper. Quam 
+                quisque id diam vel quam. Consectetur purus ut faucibus pulvinar elementum integer enim. 
+                Amet consectetur adipiscing elit duis tristique sollicitudin. Est ante in nibh mauris cursus.
+            </div>
+        </div>
+
     </center>
+    <script src={{ url_for('static', filename='js/index.js') }}></script>
 {% endblock %}
