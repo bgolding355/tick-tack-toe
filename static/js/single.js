@@ -13,7 +13,7 @@ socket.on('connect', () => {
     document.querySelectorAll('.grid-item').forEach(entry => {
         //Emits id for the square that is selected
         entry.onclick = () => {
-            if (!(locked)) socket.emit('square_selection', {square: entry.id});
+            if (!(locked)) socket.emit('square_selection_singleplayer', {square: entry.id});
         }
     });
     
