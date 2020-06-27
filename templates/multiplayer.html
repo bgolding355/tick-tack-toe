@@ -1,20 +1,21 @@
 {% extends 'base.html' %}
-{% block title %} Singleplayer Game {% endblock %}
+{% block title %} Multiplayer Game {% endblock %}
 
 {% block content %} 
 <link rel='stylesheet' type='text/css' href={{url_for('static', filename='css/grid.css')}}> 
     <div class="container style="width: 650px">
         <div class = mt-4>
-            <h1> Single Player Mode</h1>
-
-            <!-- Alerts for tie, player 1 wins, player 2 wins -->
+            <h1> Multiplayer Mode</h1>
+            <h5> Your Game Id is: <span class="badge badge-secondary"> {{ game_id }}</span></h5>
+            
+            <!-- Alerts for win, loss, tie  -->
             <style> .alert {display: none} </style>
 
-            <div class="alert alert-success" id="player_win" role="alert">
+            <div class="alert alert-success" id="win" role="alert">
                 Congratulations! You have won, click <a href=# onclick="refreshPage();return false;">here</a> to play again
             </div>
 
-            <div class="alert alert-danger" id="computer_win" role="alert">
+            <div class="alert alert-danger" id="loss" role="alert">
                 You have lost! Click <a href=# onclick="refreshPage();return false;">here</a> to play again
             </div>
 

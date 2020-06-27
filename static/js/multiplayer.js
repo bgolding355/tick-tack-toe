@@ -2,11 +2,6 @@ let socket = io.connect(location.protocol + '//' + document.domain + ':' + locat
 
 let locked = false; //locked == false when the player is allowed to make a move
 
-//Refreshes page when the new_game anchor is clicked
-function refreshPage() {
-    location.reload();
-}
-
 //First connecting to socket
 socket.on('connect', () => {
     //Detects when a square is clicked

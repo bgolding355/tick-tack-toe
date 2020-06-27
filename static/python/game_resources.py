@@ -2,30 +2,32 @@
 import random
 ## Module for check_win, computer_move 
 
-# Returns the square in which the computer will move, returning -1 if there is no availible move. 
+# Returns the square in which the computer will move and whether or not that move will
+# result in a win, returning -1 if there is no availible move. 
 # If there is either a winning move, or move to prevent the player from winning it will be taken, 
 # otherwise a random square will be selected
 def computer_move(board):
     temp_board = board.copy()
+    can_move=False
     for i in range (1,28):
         if temp_board[i]=='':
             can_move=True
             #Checking if player can win by moving at board[i]
             temp_board[i]='p'
             if check_win(temp_board) == 'p':
-                return i
+                return [i,False]
             #Checking if computer can win by moving at board[i]
             temp_board[i]='c'
             if check_win(temp_board) == 'c':
-                return i
+                return [i,True]
             temp_board[i]='' #Setting temp_board[i] back to its initial state if no winning move is found
     if not(can_move): #Game is a tie
-        return -1
+        return [-1,False]
     else: #A random square is picked
         while True:
-            r = (int(random.random*100))%27+1 # 1 <= r <= 27
+            r = random.randint(1,27)
             if temp_board[r] == '':
-                return r
+                return [r,False]
 
 #Returns 'p' if the human player wins, 'c' if the computer wins, 't' if there is a tie, and '-' if there is no winner
 def check_win(board):
@@ -102,18 +104,18 @@ def check_win(board):
         #3c) Checking multi wins -> Diagonal across games, there are 4 possible wins in this scenario
         #If 1=14=27, 7=14=21, 19=14=9, and 25=14=3
         if board[1] == board[14] and board[1]==board[27]: 
-            if board[i]!='':
+            if board[1]!='':
                 return board[1]
         elif board[7]==board[14] and board[7]==board[21]: 
-            if board[i]!='':
+            if board[7]!='':
                 return board[7]
         elif board[19]==board[14] and board[19]==board[9]:
-            if board[i]!='':
+            if board[19]!='':
                 return board[19]
         elif board[25]==board[14] and board[24]==board[3]:
-            if board[i]!='':
+            if board[25]!='':
                 return board[25]
-
+    
     #If no winner has been selected, returning tie or no-winner
     if tie: 
         return 't'
