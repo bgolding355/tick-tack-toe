@@ -17,16 +17,24 @@ socket.on('connect', () => {
     });
     
     //Updates board after each move
-    socket.on('new_gamestate_multiplayer', data => {
+    socket.on('update_multiplayer_board', data => {
+
+        //DELETE ME
+        console.log(data.turn);
+        console.log(data.game_state);
+
         for (i = 1; i<=27;i++) {
             //First updating lock
-
-            //ADD ME IN HERE 
+            if (data.turn == player_number.toString()) {
+                locked = false;
+            } else {
+                locked = true
+            }
 
             //Now updating board
-            if (data[i] == 'p') {
+            if (data.game_state[i] == player_number.toString()) {
                 document.getElementById(i).innerText='X';
-            } else if (data[i] == 'c') {
+            } else if (data.game_state[i] == (player_number%2+1).toString()) {
                 document.getElementById(i).innerText='O';
             }
         }
@@ -35,10 +43,10 @@ socket.on('connect', () => {
     //Triggers Alert on Win
     socket.on('winner_multiplayer', data => {
         locked = true;
-        if (data == 'p') { //player wins
-            document.getElementById("player_win").style.display = 'block';
-        } else if (data == 'c') { //Computer wins
-            document.getElementById("computer_win").style.display = 'block';
+        if (data.winner == player_number) { //You have won
+            document.getElementById("win").style.display = 'block';
+        } else if (data.winner == (player_number%2+1)) { //Opponent wins
+            document.getElementById("loss").style.display = 'block';
         } else { //tie
             document.getElementById("tie").style.display = 'block';
         }

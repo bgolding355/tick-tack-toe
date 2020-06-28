@@ -1,3 +1,11 @@
+#TODO
+# 1) Change broadcast=True -> emit only desired users
+# 2) Page breaks upon refresh, fix this (Add socket.emit(game_state_request) on location.reload ? )
+# 3) Trim unnecicary elements from SQL
+# 4) change multiplayer win/loss message to, "click here to create a new game / join another game"
+# 5) Update "How to Play" section
+# 6) Fix computer win not updating in singleplayer
+
 # Flask imports
 from flask import Flask, render_template, session, redirect, url_for, request
 from flask_socketio import SocketIO, emit
@@ -77,11 +85,13 @@ def join_game():
 def square_selection_singleplayer(data):
     # First adding square to the session, initializing it if it DNE
     if session.get('singleplayer') is None: 
-        session['singleplayer'] = ['', '', '', '', '', '', '', '', '', '', '', '',  \
-            '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''] # 28 empty strings coresponding with each square, extra string
-                                                                            # Added to prevent potential off by 1 errors
+        session['singleplayer'] = ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',  \
+            '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'] # 28 -'s coresponding with 
+                                                                                            # each square, extra string
+                                                                                            # Added to prevent potential 
+                                                                                            # off by 1 errors
 
-    if session['singleplayer'][int(data['square'])] == '': # First checking if square is unfilled
+    if session['singleplayer'][int(data['square'])] == '-': # First checking if square is unfilled
         session['singleplayer'][int(data['square'])]='p'
         win = game_resources.check_win(session['singleplayer'])
 
@@ -102,26 +112,21 @@ def square_selection_singleplayer(data):
 @socketio.on('square_selection_multiplayer')
 def square_selection_multiplayer(data):
     # First adding square to the session, initializing it if it DNE
-    print(data['game_id'])
     game_state = list(Game.query.filter_by(game_id=data['game_id']).first().game_data) #board as a char array
-    print(f'game state: {game_state}')
 
-    if game_state[data['square']] == '-': # First checking if square is unfilled
-        #First adding the move. Setting player2 = 'c' for compatibility with game_resources.win
-        if data['player_number'] == 1:
-            game_state[data['square']] == 'p'
+    if game_state[int(data['square'])] == '-': # First checking if square is unfilled
+        # Adding the move
+        if int(data['player_number']) == 1:
+            game_state[int(data['square'])] = '1'
         else:
-            game_state[data['square']] == 'c'
+            game_state[int(data['square'])] = '2'
+        # Committing the new board to SQL
+        Game.query.filter_by(game_id=data['game_id']).first().game_data = ''.join(game_state)
+        db.session.commit()
         win = game_resources.check_win(game_state)
 
-        if win == '-':  # Computer makes move
-            computer_move = game_resources.computer_move(session['singleplayer'])
-            session['singleplayer'][computer_move[0]] = 'c'
-            if computer_move[1]:  # Is true when that move results in a win
-                emit('new_gamestate', session['singleplayer'])  # Update Board
-                emit('winner', 'c')  # Declare computer as winner
-            else:
-                emit('new_gamestate', session['singleplayer'])
+        if win == '-': # There is no winner or a tie
+            emit('update_multiplayer_board', {'turn': int(data['player_number'])%2+1, 'game_state': game_state}, broadcast=True)
         else:  # There is a tie and/or win
-            emit('new_gamestate', session['singleplayer'])  # Update Board
-            emit('winner', win)  # Declare winner
+            emit('update_multiplayer_board', {'turn': int(data['player_number'])%2+1, 'game_state': game_state}, broadcast=True)
+            emit('winner_multiplayer', {'winner': win}, broadcast=True)
