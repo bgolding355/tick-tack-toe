@@ -6,8 +6,8 @@
     <div class="container style="width: 650px">
         <div class = mt-4>
             <h1> Multiplayer Mode</h1>
-            <h5> You are Player <span id = player_number>{{ player_number }}</span></h5>
-            <h5> Your Game Id is: <span class="badge badge-secondary"> {{ game_id }}</span></h5>
+            <h5> You are Player <span id = 'player_number'>{{ player_number }}</span></h5>
+            <h5> Your Game Id is: <span id='game_id' class="badge badge-secondary">{{ game_id }}</span></h5>
             
             <!-- Alerts for win, loss, tie  -->
             <style> .alert {display: none} </style>
@@ -61,5 +61,5 @@
     </div>
 <!-- Script for SocketIO -->
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-<script src={{ url_for('static', filename='js/single.js') }}></script>
+<script src={{ url_for('static', filename='js/multiplayer.js') }}></script>
 {% endblock %}

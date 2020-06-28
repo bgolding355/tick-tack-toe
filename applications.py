@@ -39,7 +39,7 @@ def index():
 def singleplayer():
     return render_template('single.html')
 
-# Route for multiplayer game
+# Genaric route for multiplayer game
 @app.route('/multiplayer')
 def new_multiplayer_game():
     # Generates random alphanumeric string for the game
@@ -54,7 +54,7 @@ def new_multiplayer_game():
     # Redirects them to /multiplayer/random_string
     return redirect(url_for('multiplayer', game_id=random_string), code=302)
 
-# route for specific game
+# Route for specific multiplayer game
 @app.route('/multiplayer/<string:game_id>')
 def multiplayer(game_id):
     # If this is the second user to join this game, adding them to player2 and switching player_number = 2
@@ -97,8 +97,31 @@ def square_selection_singleplayer(data):
             emit('new_gamestate', session['singleplayer'])  # Update Board
             emit('winner', win)  # Declare winner
 
-# Triggers when a new square is selected (multiplayer)
+# Triggers when a new square is selected (multiplayer). This differs from singleplayer as it
+# keeps track of which player can move
 @socketio.on('square_selection_multiplayer')
 def square_selection_multiplayer(data):
-    
-    return None
+    # First adding square to the session, initializing it if it DNE
+    print(data['game_id'])
+    game_state = list(Game.query.filter_by(game_id=data['game_id']).first().game_data) #board as a char array
+    print(f'game state: {game_state}')
+
+    if game_state[data['square']] == '-': # First checking if square is unfilled
+        #First adding the move. Setting player2 = 'c' for compatibility with game_resources.win
+        if data['player_number'] == 1:
+            game_state[data['square']] == 'p'
+        else:
+            game_state[data['square']] == 'c'
+        win = game_resources.check_win(game_state)
+
+        if win == '-':  # Computer makes move
+            computer_move = game_resources.computer_move(session['singleplayer'])
+            session['singleplayer'][computer_move[0]] = 'c'
+            if computer_move[1]:  # Is true when that move results in a win
+                emit('new_gamestate', session['singleplayer'])  # Update Board
+                emit('winner', 'c')  # Declare computer as winner
+            else:
+                emit('new_gamestate', session['singleplayer'])
+        else:  # There is a tie and/or win
+            emit('new_gamestate', session['singleplayer'])  # Update Board
+            emit('winner', win)  # Declare winner
