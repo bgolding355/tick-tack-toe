@@ -1,7 +1,6 @@
 #TODO
 # 1) Change broadcast=True -> emit only desired users
 # 2) Page breaks upon refresh, fix this (Add socket.emit(game_state_request) on location.reload ? )
-# 3) Trim unnecicary elements from SQL
 
 # Flask imports
 from flask import Flask, render_template, session, redirect, url_for, request
@@ -28,7 +27,6 @@ class Game(db.Model):
     game_id = db.Column(db.String(8), primary_key=True)
     player1 = db.Column(db.String(20))
     player2 = db.Column(db.String(20))
-    turn = db.Column(db.String(1)) #Either 1 or 2 coinciding with which player is currently allowed to move
     game_data = db.Column(db.String(28))
 
 # Default route
@@ -52,7 +50,7 @@ def new_multiplayer_game():
 
     # Creates entry for game in SQL database
     game_data = '----------------------------' #28 '-'s
-    new_game = Game(game_id=random_string, player1=session.get('user_id'), player2 = '', turn='1', game_data=game_data)
+    new_game = Game(game_id=random_string, player1=session.get('user_id'), player2 = '', game_data=game_data)
     db.session.add(new_game)
     db.session.commit()
 
@@ -75,7 +73,6 @@ def multiplayer(game_id):
 def join_game():
     game_id = request.values['game_id']
     return redirect(url_for('multiplayer', game_id=game_id), code=302)
-
 
 # Triggers when a new square is selected (singleplayer)
 @socketio.on('square_selection_singleplayer')
@@ -127,3 +124,9 @@ def square_selection_multiplayer(data):
         else:  # There is a tie and/or win
             emit('update_multiplayer_board', {'turn': int(data['player_number'])%2+1, 'game_state': game_state}, broadcast=True)
             emit('winner_multiplayer', {'winner': win}, broadcast=True)
+
+# Triggers when page is refreshed (multiplayer), takes a game_id as input and returns the coresponding board
+@socketio.on('board_update_request')
+def board_update_request(data):
+    board = list(Game.query.filter_by(game_id=data['game_id']).first().game_data)
+    emit('update_multiplayer_board', {'turn': -1, 'game_state': board}, broadcast=True) # -1 coresponds to no change

@@ -5,6 +5,9 @@ let locked = true //Player 1 moves first
 if (player_number == 1) locked = false;
 let game_id = document.getElementById('game_id').innerHTML;
 
+// Asking flask for the board when page is loaded
+socket.emit('board_update_request', {'game_id':game_id});
+
 //First connecting to socket
 socket.on('connect', () => {
     //Detects when a square is clicked
@@ -18,18 +21,15 @@ socket.on('connect', () => {
     
     //Updates board after each move
     socket.on('update_multiplayer_board', data => {
-
-        //DELETE ME
-        console.log(data.turn);
-        console.log(data.game_state);
-
         for (i = 1; i<=27;i++) {
-            //First updating lock
-            if (data.turn == player_number.toString()) {
-                locked = false;
-            } else {
-                locked = true
-            }
+            //First updating lock if turn != -1
+            if (data.turn != "-1") {
+                if (data.turn == player_number.toString()) {
+                    locked = false;
+                } else {
+                    locked = true
+                }
+            } 
 
             //Now updating board
             if (data.game_state[i] == player_number.toString()) {
