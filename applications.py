@@ -1,7 +1,3 @@
-#TODO
-# 1) Change broadcast=True -> emit only desired users
-# 2) Page breaks upon refresh, fix this (Add socket.emit(game_state_request) on location.reload ? )
-
 # Flask imports
 from flask import Flask, render_template, session, redirect, url_for, request
 from flask_socketio import SocketIO, emit
