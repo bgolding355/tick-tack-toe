@@ -2,9 +2,6 @@
 # 1) Change broadcast=True -> emit only desired users
 # 2) Page breaks upon refresh, fix this (Add socket.emit(game_state_request) on location.reload ? )
 # 3) Trim unnecicary elements from SQL
-# 4) change multiplayer win/loss message to, "click here to create a new game / join another game"
-# 5) Update "How to Play" section
-# 6) Fix computer win not updating in singleplayer
 
 # Flask imports
 from flask import Flask, render_template, session, redirect, url_for, request

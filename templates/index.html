@@ -26,18 +26,23 @@
         <div class='container' style="width: 650px">
             <div class = 'mt-4 px-1'>
                 <h1> How to Play</h1>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                Velit egestas dui id ornare. Amet est placerat in egestas erat imperdiet 
-                sed euismod nisi. Semper eget duis at tellus at. A arcu cursus vitae congue 
-                mauris rhoncus aenean vel. Pulvinar mattis nunc sed blandit libero volutpat sed 
-                cras. Etiam dignissim diam quis enim lobortis scelerisque fermentum. In hac habitasse 
-                platea dictumst quisque sagittis purus. Pulvinar sapien et ligula ullamcorper. Quam 
-                quisque id diam vel quam. Consectetur purus ut faucibus pulvinar elementum integer enim. 
-                Amet consectetur adipiscing elit duis tristique sollicitudin. Est ante in nibh mauris cursus.
+                <h2> The Basics </h2>
+                This is a 3D version of the classic Tick-Tack-Toe game, there are three boards of 3x3 cells each.
+                To win, a player must must have a series of 3 consecutive cells marked with the same symbol either 
+                within the same board or across the 3 boards. <br /> 
+
+                <h2> Some Examples of Wins </h2>
+                <h5> 3 across on a single board </h5>
+                <img src= {{ url_for('static', filename='images/ex1.png') }} class="img-thumbnail" width="65%"> 
+                <h5> 3 across on all boards </h5>
+                <img src= {{ url_for('static', filename='images/ex2.png') }} class="img-thumbnail" width="65%"> 
+                <h5> Diagonal on all boards </h5>
+                <img src= {{ url_for('static', filename='images/ex3.png') }} class="img-thumbnail" width="65%"> 
+                <h5> The same cell on all boards </h5>
+                <img src= {{ url_for('static', filename='images/ex4.png') }} class="img-thumbnail" width="65%"> 
             </div>
         </div>
-
     </center>
+    <br />
     <script src={{ url_for('static', filename='js/index.js') }}></script>
 {% endblock %}
