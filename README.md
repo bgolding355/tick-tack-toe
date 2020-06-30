@@ -1,4 +1,4 @@
-# Final Project
+# 3D Tick-Tack-Toe
 
 ### Ben Golding - bgolding29@gmail.com
 
